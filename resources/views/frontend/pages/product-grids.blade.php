@@ -88,26 +88,25 @@
                                 <div class="single-widget recent-post">
                                     <h3 class="title">Recently Added</h3>
                                     {{-- {{dd($recent_products)}} --}}
-                                    @foreach($recent_products as $product)
-                                        <!-- Single Post -->
-                                        @php
-                                            $photo=explode(',',$product->photo);
-                                        @endphp
-                                        <div class="single-post first">
-                                            <div class="image">
-                                                <img src="{{$photo[0]}}" alt="{{$photo[0]}}">
-                                            </div>
-                                            <div class="content">
-                                                <h5><a href="{{route('product-detail',$product->slug)}}">{{$product->title}}</a></h5>
-                                                @php
-                                                    $org=($product->price-($product->price*$product->discount)/100);
-                                                @endphp
-                                                <p class="price"><del class="text-muted">${{number_format($product->price,2)}}</del>   ${{number_format($org,2)}}  </p>
+            @foreach($recent_products as $product)
+    <div class="single-post first">
+        <div class="image">
+            <img src="{{$product[0]}}" alt="{{$product[0]}}">
+        </div>
+        <div class="content">
+            <h5><a href="{{route('product-detail',$product->slug)}}">{{$product->title}}</a></h5>
+            @php
+                $org=($product->price-($product->price*$product->discount)/100);
+            @endphp
+            @if($product->discount > 0)
+                <p class="price"><del class="text-muted">${{number_format($product->price,2)}}</del> ${{number_format($org,2)}}</p>
+            @else
+                <p class="price">${{number_format($product->price,2)}}</p>
+            @endif
+        </div>
+    </div>
+@endforeach
 
-                                            </div>
-                                        </div>
-                                        <!-- End Single Post -->
-                                    @endforeach
                                 </div>
                                 <!--/ End Single Widget -->
                                 <!-- Single Widget -->
@@ -163,19 +162,20 @@
                         <div class="row">
                             {{-- {{$products}} --}}
                             @if(count($products)>0)
-                                @foreach($products as $product)
-                                    <div class="col-lg-4 col-md-6 col-12">
-                                        <div class="single-product">
-                                            <div class="product-img">
-                                                <a href="{{route('product-detail',$product->slug)}}">
-                                                    @php
-                                                        $photo=explode(',',$product->photo);
-                                                    @endphp
-                                                    <img class="default-img" src="{{$photo[0]}}" alt="{{$photo[0]}}">
-                                                    <img class="hover-img" src="{{$photo[0]}}" alt="{{$photo[0]}}">
-                                                    @if($product->discount)
-                                                                <span class="price-dec">{{$product->discount}} % Off</span>
-                                                    @endif
+                         @foreach($products as $product)
+    <div class="col-lg-4 col-md-6 col-12">
+        <div class="single-product">
+            <div class="product-img">
+                <a href="{{route('product-detail',$product->slug)}}">
+                    @php
+                        $photo=explode(',',$product->photo);
+                    @endphp
+                    <img class="default-img" src="{{$photo[0]}}" alt="{{$photo[0]}}">
+                    <img class="hover-img" src="{{$photo[0]}}" alt="{{$photo[0]}}">
+                    @if($product->discount > 0)
+                        <span class="price-dec">{{$product->discount}} % Off</span>
+                    @endif
+                </a>
                                                 </a>
                                                 <div class="button-head">
                                                     <div class="product-action">
@@ -187,17 +187,21 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="product-content">
-                                                <h3><a href="{{route('product-detail',$product->slug)}}">{{$product->title}}</a></h3>
-                                                @php
-                                                    $after_discount=($product->price-($product->price*$product->discount)/100);
-                                                @endphp
-                                                <span>${{number_format($after_discount,2)}}</span>
-                                                <del style="padding-left:4%;">${{number_format($product->price,2)}}</del>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
+                                        <div class="product-content">
+                <h3><a href="{{route('product-detail',$product->slug)}}">{{$product->title}}</a></h3>
+                @php
+                    $after_discount=($product->price-($product->price*$product->discount)/100);
+                @endphp
+                @if($product->discount > 0)
+                    <span>${{number_format($after_discount,2)}}</span>
+                    <del style="padding-left:4%;">${{number_format($product->price,2)}}</del>
+                @else
+                    <span>${{number_format($product->price,2)}}</span>
+                @endif
+            </div>
+        </div>
+    </div>
+@endforeach
                             @else
                                     <h4 class="text-warning" style="margin:100px auto;">There are no products.</h4>
                             @endif
@@ -282,10 +286,17 @@
                                                     @endif
                                                 </div>
                                             </div>
-                                            @php
-                                                $after_discount=($product->price-($product->price*$product->discount)/100);
-                                            @endphp
-                                            <h3><small><del class="text-muted">${{number_format($product->price,2)}}</del></small>    ${{number_format($after_discount,2)}}  </h3>
+                                           @php
+    $after_discount=($product->price-($product->price*$product->discount)/100);
+@endphp
+<h3>
+    @if($product->discount > 0)
+        <small><del class="text-muted">${{number_format($product->price,2)}}</del></small>    
+        ${{number_format($after_discount,2)}}
+    @else
+        ${{number_format($product->price,2)}}
+    @endif
+</h3>
                                             <div class="quickview-peragraph">
                                                 <p>{!! html_entity_decode($product->summary) !!}</p>
                                             </div>

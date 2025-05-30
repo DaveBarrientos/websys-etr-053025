@@ -37,3 +37,8 @@
     </div>
 </section>
 @endsection
+
+<script>    
+
+    
+</script>

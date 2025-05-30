@@ -19,92 +19,95 @@
 	<!-- End Breadcrumbs -->
   
 	<!-- Start Contact -->
-	<section id="contact-us" class="contact-us section">
-		<div class="container">
-				<div class="contact-head">
-					<div class="row">
-						<div class="col-lg-8 col-12">
-							<div class="form-main">
-								<div class="title">
-									@php
-										$settings=DB::table('settings')->get();
-									@endphp
-									<h4>Get in touch</h4>
-									<h3>Write us a message @auth @else<span style="font-size:12px;" class="text-danger">[You need to login first]</span>@endauth</h3>
-								</div>
-								<form class="form-contact form contact_form" method="post" action="{{route('contact.store')}}" id="contactForm" novalidate="novalidate">
-									@csrf
-									<div class="row">
-										<div class="col-lg-6 col-12">
-											<div class="form-group">
-												<label>Your Name<span>*</span></label>
-												<input name="name" id="name" type="text" placeholder="Enter your name">
-											</div>
-										</div>
-										<div class="col-lg-6 col-12">
-											<div class="form-group">
-												<label>Your Subjects<span>*</span></label>
-												<input name="subject" type="text" id="subject" placeholder="Enter Subject">
-											</div>
-										</div>
-										<div class="col-lg-6 col-12">
-											<div class="form-group">
-												<label>Your Email<span>*</span></label>
-												<input name="email" type="email" id="email" placeholder="Enter email address">
-											</div>	
-										</div>
-										<div class="col-lg-6 col-12">
-											<div class="form-group">
-												<label>Your Phone<span>*</span></label>
-												<input id="phone" name="phone" type="number" placeholder="Enter your phone">
-											</div>	
-										</div>
-										<div class="col-12">
-											<div class="form-group message">
-												<label>your message<span>*</span></label>
-												<textarea name="message" id="message" cols="30" rows="9" placeholder="Enter Message"></textarea>
-											</div>
-										</div>
-										<div class="col-12">
-											<div class="form-group button">
-												<button type="submit" class="btn ">Send Message</button>
-											</div>
-										</div>
-									</div>
-								</form>
-							</div>
-						</div>
-						<div class="col-lg-4 col-12">
-							<div class="single-head">
-								<div class="single-info">
-									<i class="fa fa-phone"></i>
-									<h4 class="title">Call us Now:</h4>
-									<ul>
-										<li>@foreach($settings as $data) {{$data->phone}} @endforeach</li>
-									</ul>
-								</div>
-								<div class="single-info">
-									<i class="fa fa-envelope-open"></i>
-									<h4 class="title">Email:</h4>
-									<ul>
-										<li><a href="mailto:info@yourwebsite.com">@foreach($settings as $data) {{$data->email}} @endforeach</a></li>
-									</ul>
-								</div>
-								<div class="single-info">
-									<i class="fa fa-location-arrow"></i>
-									<h4 class="title">Our Address:</h4>
-									<ul>
-										<li>@foreach($settings as $data) {{$data->address}} @endforeach</li>
-									</ul>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-	</section>
-	<!--/ End Contact -->
-	
+<!-- Start Contact -->
+<section id="contact-us" class="contact-us section">
+    <div class="container">
+        <div class="contact-head">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 col-12">
+                    <div class="form-main">
+                        <div class="title">
+                            @php
+                                $settings = DB::table('settings')->get();
+                            @endphp
+                            <h4>Get in touch</h4>
+                            <h3>Write us a message @auth @else<span style="font-size:12px;" class="text-danger">[You need to login first]</span>@endauth</h3>
+                        </div>
+                        <form class="form-contact form contact_form" method="post" action="{{ route('contact.store') }}" id="contactForm" novalidate="novalidate">
+                            @csrf
+                            <div class="row">
+                                <div class="col-lg-6 col-12">
+                                    <div class="form-group">
+                                        <label>Name<span>*</span></label>
+                                        <input name="name" id="name" type="text" placeholder="Enter your name">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-12">
+                                    <div class="form-group">
+                                        <label>Subjects<span>*</span></label>
+                                        <input name="subject" type="text" id="subject" placeholder="Enter Subject">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-12">
+                                    <div class="form-group">
+                                        <label>Email<span>*</span></label>
+                                        <input name="email" type="email" id="email" placeholder="Enter email address">
+                                    </div>  
+                                </div>
+                                <div class="col-lg-6 col-12">
+                                    <div class="form-group">
+                                        <label>Phone<span>*</span></label>
+                                        <input id="phone" name="phone" type="number" placeholder="Enter your phone">
+                                    </div>  
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group message">
+                                        <label>Message<span>*</span></label>
+                                        <textarea name="message" id="message" cols="30" rows="9" placeholder="Enter Message"></textarea>
+                                    </div>
+                                </div>
+                              <div class="form-group button text-center">
+    <button type="submit" class="btn btn-danger px-4">Send Message</button>
+</div>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+         
+<div class="row justify-content-center mt-5">
+    <div class="col-lg-8 col-12">
+        <div class="single-head d-flex justify-content-between text-center">
+            <div class="single-info flex-fill px-3">
+                <i class="fa fa-phone"></i>
+                <h4 class="title">Call us Now:</h4>
+                <ul>
+                    <li>+639273425459</li>
+                </ul>
+            </div>
+            <div class="single-info flex-fill px-3">
+                <i class="fa fa-envelope-open"></i>
+                <h4 class="title">Email:</h4>
+                <ul>
+                    <li><a href="mailto:nationalbookstore@gmail.com">nationalbookstore@gmail.com</a></li>
+                </ul>
+            </div>
+            <div class="single-info flex-fill px-3">
+                <i class="fa fa-location-arrow"></i>
+                <h4 class="title">Our Address:</h4>
+                <ul>
+                    <li>McArthur Highway, Urdaneta, Philippines</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</section>
+<!--/ End Contact -->
+
 	<!-- Map Section -->
 	<div class="map-section">
 		<div id="myMap">

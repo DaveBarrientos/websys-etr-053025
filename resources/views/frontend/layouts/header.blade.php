@@ -9,14 +9,13 @@
                     <!-- Top Right -->
                     <div class="right-content">
                         <ul class="list-main">
-                            {{-- <li><i class="ti-alarm-clock"></i> <a href="#">Daily deal</a></li> --}}
                             @auth 
                                 @if(Auth::user()->role=='admin')
                                     <li><i class="fa fa-truck"></i> <a href="{{route('order.track')}}">Track Order</a></li>
-                                    <li><i class="ti-user"></i> <a href="{{route('admin')}}"  target="_blank">Dashboard</a></li>
+                                    <li><i class="ti-user"></i> <a href="{{route('admin')}}" target="_blank">Dashboard</a></li>
                                 @else 
                                     <li><i class="fa fa-truck"></i> <a href="{{route('order.track')}}">Track Order</a></li>
-                                    <li><i class="ti-user"></i> <a href="{{route('user')}}"  target="_blank">Dashboard</a></li>
+                                    <li><i class="ti-user"></i> <a href="{{route('user')}}" target="_blank">Dashboard</a></li>
                                 @endif
                             @endauth
                         </ul>
@@ -31,7 +30,6 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-2 col-md-2 col-12">
-                    
                     <!-- Search Form -->
                     <div class="search-top">
                         <div class="top-search"><a href="#0"><i class="ti-search"></i></a></div>
@@ -112,76 +110,87 @@
                                             </li>
                                             <li>
                                                 <div class="sinlge-bar shopping">
-                                                    <!-- Same parent container as the cart -->
+                                                    <!-- Wishlist -->
                                                     <a href="{{route('wishlist')}}" class="single-icon"><i class="fa fa-heart-o"></i> <span class="total-count">{{Helper::wishlistCount()}}</span></a>
-                                                    <!-- Wishlist Modal Content -->
+                                                    <!-- Wishlist Dropdown -->
                                                     @auth
-                                                        <div class="shopping-item"> 
+                                                        <div class="shopping-item wishlist-dropdown"> 
                                                             <div class="dropdown-cart-header">
                                                                 <span>{{count(Helper::getAllProductFromWishlist())}} Items</span>
                                                                 <a href="{{route('wishlist')}}">View Wishlist</a>
                                                             </div>
-                                                            <ul class="shopping-list">
-                                                                @foreach(Helper::getAllProductFromWishlist() as $data)
-                                                                    @php
-                                                                        $photo=explode(',',$data->product['photo']);
-                                                                    @endphp
-                                                                    <li>
-                                                                        <a href="{{route('wishlist-delete',$data->id)}}" class="remove" title="Remove this item"><i class="fa fa-remove"></i></a>
-                                                                        <a class="cart-img" href="#"><img src="{{$photo[0]}}" alt="{{$photo[0]}}"></a>
-                                                                        <h4><a href="{{route('product-detail',$data->product['slug'])}}" target="_blank">{{$data->product['title']}}</a></h4>
-                                                                        <p class="quantity">{{$data->quantity}} x - <span class="amount">₱{{number_format($data->price,2)}}</span></p>
-                                                                    </li>
-                                                                @endforeach
-                                                            </ul>
+                                                            <div class="dropdown-cart-items" style="max-height: 300px; overflow-y: auto;">
+                                                                <ul class="shopping-list">
+                                                                    @foreach(Helper::getAllProductFromWishlist() as $data)
+                                                                        @php
+                                                                            $photo=explode(',',$data->product['photo']);
+                                                                        @endphp
+                                                                        <li>
+                                                                            <a href="{{route('wishlist-delete',$data->id)}}" class="remove" title="Remove this item"><i class="fa fa-remove"></i></a>
+                                                                            <a class="cart-img" href="{{route('product-detail',$data->product['slug'])}}">
+                                                                                <img src="{{$photo[0]}}" alt="{{$photo[0]}}" style="width: 70px; height: 70px; object-fit: cover;">
+                                                                            </a>
+                                                                            <div class="cart-item-details">
+                                                                                <h4><a href="{{route('product-detail',$data->product['slug'])}}">{{$data->product['title']}}</a></h4>
+                                                                                <p class="quantity">{{$data->quantity}} x <span class="amount">₱{{number_format($data->price,2)}}</span></p>
+                                                                                <p class="total">Total: <span>₱{{number_format($data->quantity * $data->price,2)}}</span></p>
+                                                                            </div>
+                                                                        </li>
+                                                                    @endforeach
+                                                                </ul>
+                                                            </div>
                                                             <div class="bottom">
                                                                 <div class="total">
-                                                                    <span>Total</span>
+                                                                    <span>Grand Total</span>
                                                                     <span class="total-amount">₱{{number_format(Helper::totalWishlistPrice(),2)}}</span>
                                                                 </div>
-                                                                <a href="{{route('cart')}}" class="btn animate">Cart</a>
+                                                                <a href="{{route('cart')}}" class="btn animate">View Cart</a>
                                                             </div>
                                                         </div>
                                                     @endauth
                                                 </div>
                                             </li>
                                             <li>
-                                                {{-- <div class="sinlge-bar">
-                                                <a href="{{route('wishlist')}}" class="single-icon"><i class="fa fa-heart-o" aria-hidden="true"></i></a>
-                                                </div> --}}
                                                 <div class="sinlge-bar shopping">
+                                                    <!-- Shopping Cart -->
                                                     <a href="{{route('cart')}}" class="single-icon"><i class="ti-bag"></i> <span class="total-count">{{Helper::cartCount()}}</span></a>
-                                                    <!-- Shopping Item -->
+                                                    <!-- Shopping Cart Dropdown -->
                                                     @auth
-                                                        <div class="shopping-item">
+                                                        <div class="shopping-item cart-dropdown">
                                                             <div class="dropdown-cart-header">
                                                                 <span>{{count(Helper::getAllProductFromCart())}} Items</span>
                                                                 <a href="{{route('cart')}}">View Cart</a>
                                                             </div>
-                                                            <ul class="shopping-list">
-                                                                {{-- {{Helper::getAllProductFromCart()}} --}}
+                                                            <div class="dropdown-cart-items" style="max-height: 300px; overflow-y: auto;">
+                                                                <ul class="shopping-list">
                                                                     @foreach(Helper::getAllProductFromCart() as $data)
-                                                                            @php
-                                                                                $photo=explode(',',$data->product['photo']);
-                                                                            @endphp
-                                                                            <li>
-                                                                                <a href="{{route('cart-delete',$data->id)}}" class="remove" title="Remove this item"><i class="fa fa-remove"></i></a>
-                                                                                <a class="cart-img" href="#"><img src="{{$photo[0]}}" alt="{{$photo[0]}}"></a>
-                                                                                <h4><a href="{{route('product-detail',$data->product['slug'])}}" target="_blank">{{$data->product['title']}}</a></h4>
-                                                                                <p class="quantity">{{$data->quantity}} x - <span class="amount">₱{{number_format($data->price,2)}}</span></p>
-                                                                            </li>
+                                                                        @php
+                                                                            $photo=explode(',',$data->product['photo']);
+                                                                        @endphp
+                                                                        <li>
+                                                                            <a href="{{route('cart-delete',$data->id)}}" class="remove" title="Remove this item"><i class="fa fa-remove"></i></a>
+                                                                            <a class="cart-img" href="{{route('product-detail',$data->product['slug'])}}">
+                                                                                <img src="{{$photo[0]}}" alt="{{$photo[0]}}" style="width: 70px; height: 70px; object-fit: cover;">
+                                                                            </a>
+                                                                            <div class="cart-item-details">
+                                                                                <h4><a href="{{route('product-detail',$data->product['slug'])}}">{{$data->product['title']}}</a></h4>
+                                                                                <p class="quantity">{{$data->quantity}} x <span class="amount">₱{{number_format($data->price,2)}}</span></p>
+                                                                                <p class="total">Total: <span>₱{{number_format($data->quantity * $data->price,2)}}</span></p>
+                                                                            </div>
+                                                                        </li>
                                                                     @endforeach
-                                                            </ul>
+                                                                </ul>
+                                                            </div>
                                                             <div class="bottom">
                                                                 <div class="total">
-                                                                    <span>Total</span>
+                                                                    <span>Grand Total</span>
                                                                     <span class="total-amount">₱{{number_format(Helper::totalCartPrice(),2)}}</span>
                                                                 </div>
                                                                 <a href="{{route('checkout')}}" class="btn animate">Checkout</a>
                                                             </div>
                                                         </div>
                                                     @endauth
-                                                <!--/ End Shopping Item -->
+                                                </div>
                                             </li>
                                             @auth
                                                 <li>
@@ -208,3 +217,75 @@
     </div>
     <!--/ End Header Inner -->
 </header>
+
+<style>
+    /* Add these styles to make the dropdowns scrollable and improve layout */
+    .wishlist-dropdown, .cart-dropdown {
+        width: 350px;
+        padding: 15px;
+        right: 0;
+        left: auto;
+    }
+    
+    .dropdown-cart-items {
+        max-height: 300px;
+        overflow-y: auto;
+        margin: 10px 0;
+    }
+    
+    .shopping-list li {
+        display: flex;
+        align-items: center;
+        padding: 10px 0;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .shopping-list li:last-child {
+        border-bottom: none;
+    }
+    
+    .cart-img {
+        margin-right: 15px;
+    }
+    
+    .cart-item-details {
+        flex: 1;
+    }
+    
+    .cart-item-details h4 {
+        margin: 0 0 5px 0;
+        font-size: 14px;
+    }
+    
+    .cart-item-details p {
+        margin: 3px 0;
+        font-size: 13px;
+    }
+    
+    .quantity {
+        color: #666;
+    }
+    
+    .amount, .total span {
+        font-weight: bold;
+        color: #333;
+    }
+    
+    .remove {
+        color: #ff0000;
+        margin-right: 10px;
+    }
+    
+    .bottom {
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px solid #eee;
+    }
+    
+    .total {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+</style>

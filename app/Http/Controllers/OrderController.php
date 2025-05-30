@@ -129,8 +129,8 @@ class OrderController extends Controller
         if (request('payment_method') == 'paypal') {
             $order_data['payment_method'] = 'paypal';
             $order_data['payment_status'] = 'paid';
-        } elseif (request('payment_method') == 'cardpay') {
-            $order_data['payment_method'] = 'cardpay';
+        } elseif (request('payment_method') == 'gcash') {
+            $order_data['payment_method'] = 'gcash';
             $order_data['payment_status'] = 'paid';
         } else {
             $order_data['payment_method'] = 'cod';

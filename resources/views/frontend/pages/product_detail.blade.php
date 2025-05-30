@@ -62,31 +62,36 @@
 										<!-- End Product slider -->
 									</div>
 									<div class="col-lg-6 col-12">
-										<div class="product-des">
-											<!-- Description -->
-											<div class="short">
-												<h4>{{$product_detail->title}}</h4>
-												<div class="rating-main">
-													<ul class="rating">
-														@php
-															$rate=ceil($product_detail->getReview->avg('rate'))
-														@endphp
-															@for($i=1; $i<=5; $i++)
-																@if($rate>=$i)
-																	<li><i class="fa fa-star"></i></li>
-																@else 
-																	<li><i class="fa fa-star-o"></i></li>
-																@endif
-															@endfor
-													</ul>
-													<a href="#" class="total-review">({{$product_detail['getReview']->count()}}) Review</a>
-                                                </div>
-                                                @php 
-                                                    $after_discount=($product_detail->price-(($product_detail->price*$product_detail->discount)/100));
-                                                @endphp
-												<p class="price"><span class="discount">₱{{number_format($after_discount,2)}}</span><s>₱{{number_format($product_detail->price,2)}}</s> </p>
-												<p class="description">{!!($product_detail->summary)!!}</p>
-											</div>
+    <div class="product-des">
+        <!-- Description -->
+        <div class="short">
+            <h4>{{$product_detail->title}}</h4>
+            <div class="rating-main">
+                <ul class="rating">
+                    @php
+                        $rate=ceil($product_detail->getReview->avg('rate'))
+                    @endphp
+                    @for($i=1; $i<=5; $i++)
+                        @if($rate>=$i)
+                            <li><i class="fa fa-star"></i></li>
+                        @else 
+                            <li><i class="fa fa-star-o"></i></li>
+                        @endif
+                    @endfor
+                </ul>
+                <a href="#" class="total-review">({{$product_detail['getReview']->count()}}) Review</a>
+            </div>
+            @php 
+                $after_discount=($product_detail->price-(($product_detail->price*$product_detail->discount)/100));
+            @endphp
+            <p class="price">
+                <span class="discount">Ps{{number_format($after_discount,2)}}</span>
+                @if($after_discount != $product_detail->price)
+                    <s>P{{number_format($product_detail->price,2)}}</s>
+                @endif
+            </p>
+            <p class="description">{!!($product_detail->summary)!!}</p>
+        </div>
 											<!--/ End Description -->
 											<!-- Color -->
 											{{-- <div class="color">
@@ -163,7 +168,6 @@
 
 											</div>
 											<!--/ End Product Buy -->
-											<!-- Visit 'codeastro' for more projects -->
 										</div>
 									</div>
 								</div>
@@ -340,7 +344,12 @@
 											@endphp
                                             <img class="default-img" src="{{$photo[0]}}" alt="{{$photo[0]}}">
                                             <img class="hover-img" src="{{$photo[0]}}" alt="{{$photo[0]}}">
-                                            <span class="price-dec">{{$data->discount}} % Off</span>
+                                            <span class="price-dec">
+    @if($data->discount > 0)
+        {{$data->discount}} % Off
+    @endif
+</span>
+
                                                                     {{-- <span class="out-of-stock">Hot</span> --}}
                                         </a>
                                         <div class="button-head">
@@ -356,13 +365,17 @@
                                     </div>
                                     <div class="product-content">
                                         <h3><a href="{{route('product-detail',$data->slug)}}">{{$data->title}}</a></h3>
-                                        <div class="product-price">
-                                            @php 
-                                                $after_discount=($data->price-(($data->discount*$data->price)/100));
-                                            @endphp
-                                            <span class="old">₱{{number_format($data->price,2)}}</span>
-                                            <span>₱{{number_format($after_discount,2)}}</span>
-                                        </div>
+                                      @php 
+    $after_discount = $data->price - (($data->discount * $data->price) / 100);
+@endphp
+
+<div class="product-price">
+    @if(round($after_discount, 2) < round($data->price, 2))
+        <span class="old">P{{ number_format($data->price, 2) }}</span>
+    @endif
+    <span>P{{ number_format($after_discount, 2) }}</span>
+</div>
+
                                       
                                     </div>
                                 </div>

@@ -1,12 +1,4 @@
-/* =====================================
-Template Name: Eshop
-Author Name: Naimur Rahman
-Author URI: http://www.wpthemesgrid.com/
-Description: Eshop - eCommerce HTML5 Template.
-Version:1.0
-========================================*/
-/*======================================
-[ CSS Table of contents ]
+/* [ CSS Table of contents ]
 01. Preloader CSS
 02. Header CSS
 	+ Logo
@@ -33,8 +25,7 @@ Version:1.0
 	+ Blog Single
 19. Contact CSS
 20. 404 Error CSS
-21. Footer CSS
-========================================*/
+21. Footer CSS */
 .color-plate {
   position: fixed;
   display: block;
@@ -1710,6 +1701,31 @@ Version:1.0
   background: #ec2a32;
   color: #fff;
   border-color: transparent;
+}
+.product-area .nav-tabs .btn {
+  color: #333;
+  text-transform: uppercase;
+  display: inline-block;
+  position: relative;
+  margin-right: 5px;
+  font-weight: 500;
+  background: #fff;
+  padding: 8px 20px;
+  border-radius: 5px;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.product-area .nav-tabs .btn:hover {
+  background: #ec2a32;
+  color: #fff;
+}
+
+.product-area .nav-tabs .btn.active {
+  background: black;
+  color: #fff;
 }
 /* Sinlge Product */
 .single-product {

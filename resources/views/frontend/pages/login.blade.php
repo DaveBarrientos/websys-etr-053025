@@ -1,16 +1,16 @@
 @extends('frontend.layouts.master')
 
-@section('title','Ecommerce Laravel || Login Page')
+@section('title', 'Login Page')
 
 @section('main-content')
     <!-- Breadcrumbs -->
     <div class="breadcrumbs">
         <div class="container">
-            <div class="row">
-                <div class="col-12">
+            <div class="row justify-content-center">
+                <div class="col-12 text-center">
                     <div class="bread-inner">
-                        <ul class="bread-list">
-                            <li><a href="{{route('home')}}">Home<i class="ti-arrow-right"></i></a></li>
+                        <ul class="bread-list d-inline-block">
+                            <li><a href="{{route('home')}}">Home <i class="ti-arrow-right"></i></a></li>
                             <li class="active"><a href="javascript:void(0);">Login</a></li>
                         </ul>
                     </div>
@@ -23,51 +23,35 @@
     <!-- Shop Login -->
     <section class="shop login section">
         <div class="container">
-            <div class="row"> 
-                <div class="col-lg-6 offset-lg-3 col-12">
-                    <div class="login-form">
+            <div class="row justify-content-center"> 
+                <div class="col-lg-5 col-md-7 col-12">
+                    <div class="login-form text-center">
                         <h2>Login</h2>
                         <!-- Form -->
                         <form class="form" method="post" action="{{route('login.submit')}}">
                             @csrf
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="form-group">
-                                        <label>Your Email<span>*</span></label>
-                                        <input type="email" name="email" placeholder="" required="required" value="{{old('email')}}">
-                                        @error('email')
-                                            <span class="text-danger">{{$message}}</span>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="form-group">
-                                        <label>Your Password<span>*</span></label>
-                                        <input type="password" name="password" placeholder="" required="required" value="{{old('password')}}">
-                                        @error('password')
-                                            <span class="text-danger">{{$message}}</span>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="form-group login-btn">
-                                        <button class="btn btn-facebook" type="submit">Login</button>
-                                        <a href="{{route('register.form')}}" class="btn">Register</a>
-                                        <!-- OR
-                                        <a href="{{route('login.redirect','facebook')}}" class="btn btn-facebook"><i class="ti-facebook"></i></a>
-                                        <a href="{{route('login.redirect','github')}}" class="btn btn-github"><i class="ti-github"></i></a>
-                                        <a href="{{route('login.redirect','google')}}" class="btn btn-google"><i class="ti-google"></i></a> -->
+                            <div class="form-group text-left">
+                                <label>Email <span>*</span></label>
+                                <input type="email" name="email" placeholder="" required="required" value="{{old('email')}}" class="form-control">
+                                @error('email')
+                                    <span class="text-danger">{{$message}}</span>
+                                @enderror
+                            </div>
 
-                                    </div>
-                                    <div class="checkbox">
-                                        <label class="checkbox-inline" for="2"><input name="news" id="2" type="checkbox">Remember me</label>
-                                    </div>
-                                    @if (Route::has('password.request'))
-                                        <a class="lost-pass" href="{{ route('password.reset') }}">
-                                            Lost your password?
-                                        </a>
-                                    @endif
-                                </div>
+                            <div class="form-group text-left">
+                                <label>Password <span>*</span></label>
+                                <input type="password" name="password" placeholder="" required="required" value="{{old('password')}}" class="form-control">
+                                @error('password')
+                                    <span class="text-danger">{{$message}}</span>
+                                @enderror
+                            </div>
+
+                            <div class="form-group text-center">
+                                <button class="btn btn-login" type="submit">Login</button>
+                            </div>
+
+                            <div class="form-group text-center mt-3">
+                                <a href="{{route('register.form')}}" class="btn btn-register">Register</a>
                             </div>
                         </form>
                         <!--/ End Form -->
@@ -78,30 +62,102 @@
     </section>
     <!--/ End Login -->
 @endsection
+
 @push('styles')
 <style>
-    .shop.login .form .btn{
-        margin-right:0;
+    .login-form {
+        max-width: 100%;
+        padding: 30px;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.1);
     }
-    .btn-facebook{
-        background:#39579A;
+
+    /* LOGIN BUTTON STYLES */
+    .btn-login {
+        background-color: white;
+        color: #ec2a32 !important; /* Red text */
+        padding: 12px 40px;
+        font-size: 18px;
+        font-weight: 600;
+        border: 2px solid #ec2a32;
+        border-radius: 4px;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        box-shadow: 0 4px 8px rgba(236, 42, 50, 0.3); /* Red shadow */
     }
-    .btn-facebook:hover{
-        background:#073088 !important;
+
+    .btn-login:hover {
+        background-color: #ec2a32 !important; /* Red background */
+        color: white !important; /* White text */
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(236, 42, 50, 0.4); /* Stronger red shadow */
     }
-    .btn-github{
-        background:#444444;
-        color:white;
+
+    /* REGISTER BUTTON STYLES */
+    .btn-register {
+        background-color: #fff;
+        color: black !important;
+        padding: 10px 30px;
+        font-size: 16px;
+        font-weight: 600;
+        border: 2px solid #000;
+        border-radius: 4px;
+        transition: all 0.3s ease;
     }
-    .btn-github:hover{
-        background:black !important;
+
+    .btn-register:hover {
+        background-color: black !important;
+        color: #fff !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
-    .btn-google{
-        background:#ea4335;
-        color:white;
+
+    /* Other existing styles */
+    .login-form h2 {
+        margin-bottom: 25px;
+        font-weight: 700;
+        color: #333;
     }
-    .btn-google:hover{
-        background:rgb(243, 26, 26) !important;
+
+    .form-group label {
+        font-weight: 600;
+        color: #555;
+    }
+
+    .bread-list li {
+        display: inline;
+        font-weight: 600;
+        color: #333;
+        margin-right: 6px;
+    }
+
+    .bread-list li a {
+        color: #333;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+    .bread-list li a:hover {
+        color: #ec2a32;
+    }
+
+    .bread-list li.active a {
+        color: #39579A;
+        pointer-events: none;
+    }
+
+    .form-control {
+        border-radius: 4px;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        transition: border 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: #ec2a32;
+        box-shadow: 0 0 0 0.2rem rgba(236,42,50,0.25);
     }
 </style>
 @endpush

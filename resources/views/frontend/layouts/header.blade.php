@@ -219,18 +219,103 @@
 </header>
 
 <style>
-    /* Add these styles to make the dropdowns scrollable and improve layout */
-    .wishlist-dropdown, .cart-dropdown {
-        width: 350px;
-        padding: 15px;
-        right: 0;
-        left: auto;
+    /* Base styling for the shopping bar container */
+    .sinlge-bar.shopping {
+        position: relative;
+        display: inline-block;
     }
     
+    /* Wishlist and Cart dropdowns - hidden by default */
+    .wishlist-dropdown, .cart-dropdown {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        left: auto;
+        width: 350px;
+        padding: 15px;
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: all 0.3s ease;
+    }
+    
+    /* Show dropdowns on hover */
+    .sinlge-bar.shopping:hover .wishlist-dropdown,
+    .sinlge-bar.shopping:hover .cart-dropdown {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+    
+    /* Keep dropdown visible when hovering over the dropdown itself */
+    .wishlist-dropdown:hover,
+    .cart-dropdown:hover {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+    
+    /* Dropdown header */
+    .dropdown-cart-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .dropdown-cart-header span {
+        font-weight: bold;
+        color: #333;
+    }
+    
+    .dropdown-cart-header a {
+        color: #007bff;
+        text-decoration: none;
+        font-size: 12px;
+    }
+    
+    .dropdown-cart-header a:hover {
+        text-decoration: underline;
+    }
+    
+    /* Scrollable items container */
     .dropdown-cart-items {
         max-height: 300px;
         overflow-y: auto;
         margin: 10px 0;
+    }
+    
+    /* Custom scrollbar */
+    .dropdown-cart-items::-webkit-scrollbar {
+        width: 6px;
+    }
+    
+    .dropdown-cart-items::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 3px;
+    }
+    
+    .dropdown-cart-items::-webkit-scrollbar-thumb {
+        background: #c1c1c1;
+        border-radius: 3px;
+    }
+    
+    .dropdown-cart-items::-webkit-scrollbar-thumb:hover {
+        background: #a8a8a8;
+    }
+    
+    /* Shopping list items */
+    .shopping-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
     }
     
     .shopping-list li {
@@ -238,28 +323,67 @@
         align-items: center;
         padding: 10px 0;
         border-bottom: 1px solid #eee;
+        position: relative;
     }
     
     .shopping-list li:last-child {
         border-bottom: none;
     }
     
-    .cart-img {
-        margin-right: 15px;
+    /* Remove button */
+    .remove {
+        color: #ff0000;
+        margin-right: 10px;
+        text-decoration: none;
+        font-size: 16px;
+        transition: color 0.2s ease;
     }
     
+    .remove:hover {
+        color: #cc0000;
+    }
+    
+    /* Product image */
+    .cart-img {
+        margin-right: 15px;
+        text-decoration: none;
+    }
+    
+    .cart-img img {
+        border-radius: 4px;
+        transition: transform 0.2s ease;
+    }
+    
+    .cart-img:hover img {
+        transform: scale(1.05);
+    }
+    
+    /* Product details */
     .cart-item-details {
         flex: 1;
+        min-width: 0; /* Prevents flex item from overflowing */
     }
     
     .cart-item-details h4 {
         margin: 0 0 5px 0;
         font-size: 14px;
+        line-height: 1.3;
+    }
+    
+    .cart-item-details h4 a {
+        color: #333;
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+    
+    .cart-item-details h4 a:hover {
+        color: #007bff;
     }
     
     .cart-item-details p {
         margin: 3px 0;
         font-size: 13px;
+        line-height: 1.2;
     }
     
     .quantity {
@@ -271,11 +395,7 @@
         color: #333;
     }
     
-    .remove {
-        color: #ff0000;
-        margin-right: 10px;
-    }
-    
+    /* Bottom section with total and action button */
     .bottom {
         margin-top: 15px;
         padding-top: 15px;
@@ -285,7 +405,75 @@
     .total {
         display: flex;
         justify-content: space-between;
-        margin-bottom: 10px;
+        align-items: center;
+        margin-bottom: 15px;
         font-weight: bold;
+        font-size: 16px;
+    }
+    
+    .total-amount {
+        color: #007bff;
+        font-size: 18px;
+    }
+    
+    /* Action buttons */
+    .btn.animate {
+        display: inline-block;
+        width: 100%;
+        padding: 10px 15px;
+        background: #007bff;
+        color: white;
+        text-decoration: none;
+        text-align: center;
+        border-radius: 4px;
+        transition: all 0.3s ease;
+        font-weight: bold;
+    }
+    
+    .btn.animate:hover {
+        background: #0056b3;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 5px rgba(0,123,255,0.3);
+    }
+    
+    /* Icon styling */
+    .single-icon {
+        position: relative;
+        text-decoration: none;
+        color: inherit;
+        padding: 10px;
+        display: inline-block;
+        transition: color 0.2s ease;
+    }
+    
+    .single-icon:hover {
+        color: #007bff;
+    }
+    
+    /* Count badge */
+    .total-count {
+        position: absolute;
+        top: 0;
+        right: 0;
+        background:rgb(252, 85, 85);
+        color: white;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+    }
+    
+    /* Empty state */
+    .shopping-list:empty::before {
+        content: "No items in your list";
+        color: #999;
+        font-style: italic;
+        text-align: center;
+        display: block;
+        padding: 20px;
     }
 </style>

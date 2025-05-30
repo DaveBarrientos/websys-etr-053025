@@ -5,7 +5,7 @@
 <div class="card">
     <h5 class="card-header">Add Product</h5>
     <div class="card-body">
-      <form method="post" action="{{route('product.store')}}">
+      <form method="post" action="{{route('product.store')}}" enctype="multipart/form-data">
         {{csrf_field()}}
         <div class="form-group">
           <label for="inputTitle" class="col-form-label">Title <span class="text-danger">*</span></label>
@@ -31,12 +31,10 @@
           @enderror
         </div>
 
-
         <div class="form-group">
           <label for="is_featured">Is Featured</label><br>
           <input type="checkbox" name='is_featured' id='is_featured' value='1' checked> Yes                        
         </div>
-              {{-- {{$categories}} --}}
 
         <div class="form-group">
           <label for="cat_id">Category <span class="text-danger">*</span></label>
@@ -52,9 +50,6 @@
           <label for="child_cat_id">Sub Category</label>
           <select name="child_cat_id" id="child_cat_id" class="form-control">
               <option value="">--Select any category--</option>
-              {{-- @foreach($parent_cats as $key=>$parent_cat)
-                  <option value='{{$parent_cat->id}}'>{{$parent_cat->title}}</option>
-              @endforeach --}}
           </select>
         </div>
 
@@ -74,7 +69,6 @@
           @enderror
         </div>
 
-
         <div class="form-group">
           <label for="condition">Condition</label>
           <select name="condition" class="form-control">
@@ -92,22 +86,21 @@
           <span class="text-danger">{{$message}}</span>
           @enderror
         </div>
+
         <div class="form-group">
           <label for="inputPhoto" class="col-form-label">Photo <span class="text-danger">*</span></label>
-          <div class="input-group">
-              <span class="input-group-btn">
-                  <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-secondary text-white">
-                  <i class="fa fa-picture-o"></i> Choose
-                  </a>
-              </span>
-          <input id="thumbnail" class="form-control" type="text" name="photo" value="{{old('photo')}}">
-        </div>
-        <div id="holder" style="margin-top:15px;max-height:100px;"></div>
+          <div class="custom-file">
+              <input type="file" class="custom-file-input" id="photo" name="photo">
+              <label class="custom-file-label" for="photo">Choose file</label>
+          </div>
+          <div class="image-preview mt-2">
+              <img id="imagePreview" src="#" alt="Image Preview" style="max-height: 100px; display: none;"/>
+          </div>
           @error('photo')
           <span class="text-danger">{{$message}}</span>
           @enderror
         </div>
-        
+
         <div class="form-group">
           <label for="status" class="col-form-label">Status <span class="text-danger">*</span></label>
           <select name="status" class="form-control">
@@ -132,14 +125,12 @@
 <link rel="stylesheet" href="{{asset('backend/summernote/summernote.min.css')}}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
 @endpush
+
 @push('scripts')
-<script src="/vendor/laravel-filemanager/js/stand-alone-button.js"></script>
 <script src="{{asset('backend/summernote/summernote.min.js')}}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
 
 <script>
-    $('#lfm').filemanager('image');
-
     $(document).ready(function() {
       $('#summary').summernote({
         placeholder: "Write short description.....",
@@ -155,50 +146,60 @@
           height: 150
       });
     });
-    // $('select').selectpicker();
 
-</script>
-
-<script>
-  $('#cat_id').change(function(){
-    var cat_id=$(this).val();
-    // alert(cat_id);
-    if(cat_id !=null){
-      // Ajax call
-      $.ajax({
-        url:"/admin/category/"+cat_id+"/child",
-        data:{
-          _token:"{{csrf_token()}}",
-          id:cat_id
-        },
-        type:"POST",
-        success:function(response){
-          if(typeof(response) !='object'){
-            response=$.parseJSON(response)
-          }
-          // console.log(response);
-          var html_option="<option value=''>----Select sub category----</option>"
-          if(response.status){
-            var data=response.data;
-            // alert(data);
-            if(response.data){
-              $('#child_cat_div').removeClass('d-none');
-              $.each(data,function(id,title){
-                html_option +="<option value='"+id+"'>"+title+"</option>"
-              });
+    // Image preview
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            
+            reader.onload = function(e) {
+                $('#imagePreview').attr('src', e.target.result);
+                $('#imagePreview').show();
             }
-            else{
-            }
-          }
-          else{
-            $('#child_cat_div').addClass('d-none');
-          }
-          $('#child_cat_id').html(html_option);
+            
+            reader.readAsDataURL(input.files[0]);
         }
-      });
     }
-    else{
-    }
-  })
+
+    $("#photo").change(function() {
+        readURL(this);
+        // Update the label with the file name
+        var fileName = $(this).val().split('\\').pop();
+        $(this).next('.custom-file-label').html(fileName);
+    });
+
+    // Child category AJAX
+    $('#cat_id').change(function(){
+        var cat_id=$(this).val();
+        if(cat_id !=null){
+            $.ajax({
+                url:"/admin/category/"+cat_id+"/child",
+                data:{
+                    _token:"{{csrf_token()}}",
+                    id:cat_id
+                },
+                type:"POST",
+                success:function(response){
+                    if(typeof(response) !='object'){
+                        response=$.parseJSON(response)
+                    }
+                    var html_option="<option value=''>----Select sub category----</option>"
+                    if(response.status){
+                        var data=response.data;
+                        if(response.data){
+                            $('#child_cat_div').removeClass('d-none');
+                            $.each(data,function(id,title){
+                                html_option +="<option value='"+id+"'>"+title+"</option>"
+                            });
+                        }
+                    }
+                    else{
+                        $('#child_cat_div').addClass('d-none');
+                    }
+                    $('#child_cat_id').html(html_option);
+                }
+            });
+        }
+    })
 </script>
 @endpush

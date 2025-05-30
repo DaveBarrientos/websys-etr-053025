@@ -248,36 +248,49 @@ class OrderController extends Controller
         return view('frontend.pages.order-track');
     }
 
-    public function productTrackOrder(Request $request){
-        // return $request->all();
-        $order=Order::where('user_id',auth()->user()->id)->where('order_number',$request->order_number)->first();
-        if($order){
-            if($order->status=="new"){
-            request()->session()->flash('success','Your order has been placed.');
-            return redirect()->route('home');
-
-            }
-            elseif($order->status=="process"){
-                request()->session()->flash('success','Your order is currently processing.');
-                return redirect()->route('home');
+public function productTrackOrder(Request $request) {
+    $order = Order::where('user_id', auth()->user()->id)
+                 ->where('order_number', $request->order_number)
+                 ->first();
     
-            }
-            elseif($order->status=="delivered"){
-                request()->session()->flash('success','Your order has been delivered. Thank you for shopping with us.');
-                return redirect()->route('home');
-    
-            }
-            else{
-                request()->session()->flash('error','Sorry, your order has been canceled.');
-                return redirect()->route('home');
-    
-            }
+    if ($order) {
+        switch ($order->status) {
+            case "new":
+                return response()->json([
+                    'status' => 'success',
+                    'title' => 'Order Placed',
+                    'message' => 'Your order has been placed.'
+                ]);
+                
+            case "process":
+                return response()->json([
+                    'status' => 'info',
+                    'title' => 'Order Processing',
+                    'message' => 'Your order is currently processing.'
+                ]);
+                
+            case "delivered":
+                return response()->json([
+                    'status' => 'success',
+                    'title' => 'Order Delivered',
+                    'message' => 'Your order has been delivered. Thank you for shopping with us.'
+                ]);
+                
+            default:
+                return response()->json([
+                    'status' => 'error',
+                    'title' => 'Order Canceled',
+                    'message' => 'Sorry, your order has been canceled.'
+                ]);
         }
-        else{
-            request()->session()->flash('error','Invalid order number. Please try again!');
-            return back();
-        }
+    } else {
+        return response()->json([
+            'status' => 'error',
+            'title' => 'Invalid Order',
+            'message' => 'Invalid order number. Please try again!'
+        ]);
     }
+}
 
     // PDF generate
     public function pdf(Request $request){

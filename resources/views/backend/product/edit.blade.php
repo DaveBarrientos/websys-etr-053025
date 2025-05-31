@@ -5,7 +5,7 @@
 <div class="card">
     <h5 class="card-header">Edit Product</h5>
     <div class="card-body">
-      <form method="post" action="{{route('product.update',$product->id)}}" enctype="multipart/form-data">
+      <form method="post" action="{{route('product.update',$product->id)}}">
         @csrf 
         @method('PATCH')
         <div class="form-group">
@@ -32,10 +32,12 @@
           @enderror
         </div>
 
+
         <div class="form-group">
           <label for="is_featured">Is Featured</label><br>
           <input type="checkbox" name='is_featured' id='is_featured' value='{{$product->is_featured}}' {{(($product->is_featured) ? 'checked' : '')}}> Yes                        
         </div>
+              {{-- {{$categories}} --}}
 
         <div class="form-group">
           <label for="cat_id">Category <span class="text-danger">*</span></label>
@@ -46,16 +48,22 @@
               @endforeach
           </select>
         </div>
+        @php 
+          $sub_cat_info=DB::table('categories')->select('title')->where('id',$product->child_cat_id)->get();
+        // dd($sub_cat_info);
 
+        @endphp
+        {{-- {{$product->child_cat_id}} --}}
         <div class="form-group {{(($product->child_cat_id)? '' : 'd-none')}}" id="child_cat_div">
           <label for="child_cat_id">Sub Category</label>
           <select name="child_cat_id" id="child_cat_id" class="form-control">
               <option value="">--Select any sub category--</option>
+              
           </select>
         </div>
 
         <div class="form-group">
-          <label for="price" class="col-form-label">Price($) <span class="text-danger">*</span></label>
+          <label for="price" class="col-form-label">Price(NRS) <span class="text-danger">*</span></label>
           <input id="price" type="number" name="price" placeholder="Enter price"  value="{{$product->price}}" class="form-control">
           @error('price')
           <span class="text-danger">{{$message}}</span>
@@ -69,7 +77,8 @@
           <span class="text-danger">{{$message}}</span>
           @enderror
         </div>
-
+      
+      
         <div class="form-group">
           <label for="condition">Condition</label>
           <select name="condition" class="form-control">
@@ -87,32 +96,28 @@
           <span class="text-danger">{{$message}}</span>
           @enderror
         </div>
-
         <div class="form-group">
-          <label for="inputPhoto" class="col-form-label">Photo</label>
-          <div class="custom-file">
-              <input type="file" class="custom-file-input" id="photo" name="photo">
-              <label class="custom-file-label" for="photo">Choose file</label>
-          </div>
-          <div class="image-preview mt-2">
-              @if($product->photo)
-                  <img src="{{asset('storage'.$product->photo)}}" alt="Current Image" style="max-height: 100px;"/>
-                  <img id="imagePreview" src="#" alt="New Image Preview" style="max-height: 100px; display: none;"/>
-              @else
-                  <img id="imagePreview" src="#" alt="Image Preview" style="max-height: 100px; display: none;"/>
-              @endif
-          </div>
+          <label for="inputPhoto" class="col-form-label">Photo <span class="text-danger">*</span></label>
+          <div class="input-group">
+              <span class="input-group-btn">
+                  <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary text-white">
+                  <i class="fas fa-image"></i> Choose
+                  </a>
+              </span>
+          <input id="thumbnail" class="form-control" type="text" name="photo" value="{{$product->photo}}">
+        </div>
+        <div id="holder" style="margin-top:15px;max-height:100px;"></div>
           @error('photo')
           <span class="text-danger">{{$message}}</span>
           @enderror
         </div>
-
+        
         <div class="form-group">
           <label for="status" class="col-form-label">Status <span class="text-danger">*</span></label>
           <select name="status" class="form-control">
             <option value="active" {{(($product->status=='active')? 'selected' : '')}}>Active</option>
             <option value="inactive" {{(($product->status=='inactive')? 'selected' : '')}}>Inactive</option>
-          </select>
+        </select>
           @error('status')
           <span class="text-danger">{{$message}}</span>
           @enderror
@@ -129,87 +134,78 @@
 @push('styles')
 <link rel="stylesheet" href="{{asset('backend/summernote/summernote.min.css')}}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
-@endpush
 
+@endpush
 @push('scripts')
+<script src="/vendor/laravel-filemanager/js/stand-alone-button.js"></script>
 <script src="{{asset('backend/summernote/summernote.min.js')}}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
 
 <script>
-    $(document).ready(function() {
-      $('#summary').summernote({
-        placeholder: "Write short description.....",
-          tabsize: 2,
-          height: 100
-      });
-    });
+    $('#lfm').filemanager('image');
 
     $(document).ready(function() {
+    $('#summary').summernote({
+      placeholder: "Write short description.....",
+        tabsize: 2,
+        height: 150
+    });
+    });
+    $(document).ready(function() {
       $('#description').summernote({
-        placeholder: "Write detail description.....",
+        placeholder: "Write detail Description.....",
           tabsize: 2,
           height: 150
       });
     });
+</script>
 
-    // Image preview
-    function readURL(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            
-            reader.onload = function(e) {
-                $('#imagePreview').attr('src', e.target.result);
-                $('#imagePreview').show();
-            }
-            
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
+<script>
+  var  child_cat_id='{{$product->child_cat_id}}';
+        // alert(child_cat_id);
+        $('#cat_id').change(function(){
+            var cat_id=$(this).val();
 
-    $("#photo").change(function() {
-        readURL(this);
-        // Update the label with the file name
-        var fileName = $(this).val().split('\\').pop();
-        $(this).next('.custom-file-label').html(fileName);
-    });
-
-    // Child category AJAX
-    var child_cat_id = '{{$product->child_cat_id}}';
-    $('#cat_id').change(function(){
-        var cat_id = $(this).val();
-        if(cat_id != null){
-            $.ajax({
-                url: "/admin/category/"+cat_id+"/child",
-                type: "POST",
-                data: {
-                    _token: "{{csrf_token()}}",
-                    id: cat_id
-                },
-                success: function(response){
-                    if(typeof(response) != 'object'){
-                        response = $.parseJSON(response);
-                    }
-                    var html_option = "<option value=''>--Select any sub category--</option>";
-                    if(response.status){
-                        var data = response.data;
-                        if(response.data){
-                            $('#child_cat_div').removeClass('d-none');
-                            $.each(data, function(id, title){
-                                html_option += "<option value='"+id+"' "+(child_cat_id == id ? 'selected ' : '')+">"+title+"</option>";
-                            });
+            if(cat_id !=null){
+                // ajax call
+                $.ajax({
+                    url:"/admin/category/"+cat_id+"/child",
+                    type:"POST",
+                    data:{
+                        _token:"{{csrf_token()}}"
+                    },
+                    success:function(response){
+                        if(typeof(response)!='object'){
+                            response=$.parseJSON(response);
                         }
-                    }
-                    else{
-                        $('#child_cat_div').addClass('d-none');
-                    }
-                    $('#child_cat_id').html(html_option);
-                }
-            });
-        }
-    });
+                        var html_option="<option value=''>--Select any one--</option>";
+                        if(response.status){
+                            var data=response.data;
+                            if(response.data){
+                                $('#child_cat_div').removeClass('d-none');
+                                $.each(data,function(id,title){
+                                    html_option += "<option value='"+id+"' "+(child_cat_id==id ? 'selected ' : '')+">"+title+"</option>";
+                                });
+                            }
+                            else{
+                                console.log('no response data');
+                            }
+                        }
+                        else{
+                            $('#child_cat_div').addClass('d-none');
+                        }
+                        $('#child_cat_id').html(html_option);
 
-    if(child_cat_id != null){
-        $('#cat_id').change();
-    }
+                    }
+                });
+            }
+            else{
+
+            }
+
+        });
+        if(child_cat_id!=null){
+            $('#cat_id').change();
+        }
 </script>
 @endpush

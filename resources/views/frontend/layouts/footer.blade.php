@@ -137,3 +137,6 @@
 
 
 </script>
+<!-- jQuery first, then Popper.js (if used), then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

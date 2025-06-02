@@ -154,4 +154,11 @@ class CouponController extends Controller
             return redirect()->back();
         }
     }
+    public function couponRemove()
+{
+    session()->forget('coupon');
+    request()->session()->flash('success', 'Coupon has been removed.');
+    return redirect()->back();
+}
+
 }

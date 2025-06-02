@@ -64,15 +64,14 @@ return [
             'url' => env('AWS_URL'),
             'endpoint' => env('AWS_ENDPOINT'),
         ],
-        'disks' => [
-    'public' => [
-        'driver' => 'local',
-        'root' => storage_path('app/public'),
-        'url' => env('APP_URL').'/storage',
-        'visibility' => 'public',
-    ],
-    // ...
-],
+
+        // Add a new disk for saving directly to the public directory
+        'public_root' => [
+            'driver' => 'local',
+            'root' => public_path(), // This points to your public directory
+            'url' => env('APP_URL'), // Base URL for public assets
+            'visibility' => 'public',
+        ],
 
     ],
 

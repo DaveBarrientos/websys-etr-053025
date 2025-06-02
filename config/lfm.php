@@ -59,7 +59,7 @@ return [
             ],
         ],
         'image' => [
-            'folder_name'  => 'photos',
+            'folder_name'  => 'images', // Changed from 'photos' to 'images'
             'startup_view' => 'list',
             'max_size'     => 50000, // size in KB
             'valid_mime'   => [
@@ -90,7 +90,7 @@ return [
     |--------------------------------------------------------------------------
      */
 
-    'disk'                     => 'public',
+    'disk'                     => 'public_root', // Changed from 'public' to 'public_root'
 
     'rename_file'              => false,
 

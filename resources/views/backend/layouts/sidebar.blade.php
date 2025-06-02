@@ -135,12 +135,12 @@
     <hr class="sidebar-divider">
 
     <!-- Heading -->
-    <div class="sidebar-heading">
+    <!-- <div class="sidebar-heading">
       Posts
-    </div>
+    </div> -->
 
     <!-- Posts -->
-    <li class="nav-item">
+    <!-- <li class="nav-item">
       <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#postCollapse" aria-expanded="true" aria-controls="postCollapse">
         <i class="fas fa-fw fa-folder"></i>
         <span>Posts</span>
@@ -152,10 +152,10 @@
           <a class="collapse-item" href="{{route('post.create')}}">Add Post</a>
         </div>
       </div>
-    </li>
+    </li> -->
 
      <!-- Category -->
-     <li class="nav-item">
+     <!-- <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#postCategoryCollapse" aria-expanded="true" aria-controls="postCategoryCollapse">
           <i class="fas fa-sitemap fa-folder"></i>
           <span>Category</span>
@@ -167,7 +167,7 @@
             <a class="collapse-item" href="{{route('post-category.create')}}">Add Category</a>
           </div>
         </div>
-      </li>
+      </li> -->
 
       <!-- Tags -->
     <!-- <li class="nav-item">

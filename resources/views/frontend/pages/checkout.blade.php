@@ -89,7 +89,29 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    
+                                    <!-- After the address fields, before the closing </div> tag -->
+<div class="col-lg-12 col-12">
+    <div class="form-group" style="margin-top: 20px;">
+        
+        <div class="input-group" style="max-width: 400px;">
+            <input type="text" name="code" class="form-control" placeholder="Enter Valid Coupon" 
+                   value="{{ session('coupon')['code'] ?? '' }}">
+            <div class="input-group-append">
+                <button type="submit" formaction="{{route('coupon-store')}}" 
+                        class="btn btn-primary">Apply Coupon</button>
+            </div>
+        </div>
+        @if(session('coupon'))
+            <small class="text-success" style="display: block; margin-top: 5px;">
+                Voucher "{{ session('coupon')['code'] }}" applied
+                <button type="submit" formaction="{{route('coupon-remove')}}" 
+                        class="btn btn-link text-danger" style="padding: 0; vertical-align: baseline;">
+                    (Remove)
+                </button>
+            </small>
+        @endif
+    </div>
+</div>
                                 </div>
                                 <!--/ End Form -->
                             </div>

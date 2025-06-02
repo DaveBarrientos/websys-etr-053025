@@ -116,10 +116,20 @@
                                             </div>
                                             <div class="content">
                                                 <h5><a href="{{route('product-detail',$product->slug)}}">{{$product->title}}</a></h5>
-                                                @php
-                                                    $org=($product->price-($product->price*$product->discount)/100);
-                                                @endphp
-                                                <p class="price"><del class="text-muted">${{number_format($product->price,2)}}</del>   ${{number_format($org,2)}}  </p>                                                
+												<p class="price">
+    @if($product->discount > 0)
+        ₱{{ number_format($product->price - ($product->price * $product->discount / 100), 2) }}
+        <br>
+        <s class="text-muted">₱{{ number_format($product->price, 2) }}</s>
+    @else
+        ₱{{ number_format($product->price, 2) }}
+    @endif
+</p>
+
+
+
+
+                                              
                                             </div>
                                         </div>
                                         <!-- End Single Post -->
@@ -208,13 +218,19 @@
 												<div class="col-lg-8 col-md-6 col-12">
 													<div class="list-content">
 														<div class="product-content">
-															<div class="product-price">
-																@php
-																	$after_discount=($product->price-($product->price*$product->discount)/100);
-																@endphp
-																<span>${{number_format($after_discount,2)}}</span>
-																<del>${{number_format($product->price,2)}}</del>
-															</div>
+														@php
+    $after_discount = $product->price - ($product->price * $product->discount / 100);
+@endphp
+
+<div class="product-price">
+    @if ($product->discount > 0)
+        <span>₱{{ number_format($after_discount, 2) }}</span>
+        <del>₱{{ number_format($product->price, 2) }}</del>
+    @else
+        <span>₱{{ number_format($product->price, 2) }}</span>
+    @endif
+</div>
+
 															<h3 class="title"><a href="{{route('product-detail',$product->slug)}}">{{$product->title}}</a></h3>
 														{{-- <p>{!! html_entity_decode($product->summary) !!}</p> --}}
 														</div>
@@ -301,14 +317,19 @@
 														<span><i class="fa fa-times-circle-o text-danger"></i> {{$product->stock}} out stock</span>
 														@endif
 													</div>
-												</div>
-												@php
-													$after_discount=($product->price-($product->price*$product->discount)/100);
-												@endphp
-												<h3><small><del class="text-muted">${{number_format($product->price,2)}}</del></small>    ${{number_format($after_discount,2)}}  </h3>
-												<div class="quickview-peragraph">
-													<p>{!! html_entity_decode($product->summary) !!}</p>
-												</div>
+													@php
+    $after_discount = $product->price - ($product->price * $product->discount / 100);
+@endphp
+
+<h3>
+    @if ($product->discount > 0)
+        <small><del class="text-muted">₱{{ number_format($product->price, 2) }}</del></small>
+        ₱{{ number_format($after_discount, 2) }}
+    @else
+        ₱{{ number_format($product->price, 2) }}
+    @endif
+</h3>
+
 												@if($product->size)
 													<div class="size">
 														<h4>Size</h4>

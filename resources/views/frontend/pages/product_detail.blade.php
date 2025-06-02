@@ -85,9 +85,9 @@
                 $after_discount=($product_detail->price-(($product_detail->price*$product_detail->discount)/100));
             @endphp
             <p class="price">
-                <span class="discount">Ps{{number_format($after_discount,2)}}</span>
+                <span class="discount">₱{{number_format($after_discount,2)}}</span>
                 @if($after_discount != $product_detail->price)
-                    <s>P{{number_format($product_detail->price,2)}}</s>
+                    <s>₱{{number_format($product_detail->price,2)}}</s>
                 @endif
             </p>
             <p class="description">{!!($product_detail->summary)!!}</p>
@@ -371,9 +371,9 @@
 
 <div class="product-price">
     @if(round($after_discount, 2) < round($data->price, 2))
-        <span class="old">P{{ number_format($data->price, 2) }}</span>
+        <span class="old">₱{{ number_format($data->price, 2) }}</span>
     @endif
-    <span>P{{ number_format($after_discount, 2) }}</span>
+    <span>₱{{ number_format($after_discount, 2) }}</span>
 </div>
 
                                       

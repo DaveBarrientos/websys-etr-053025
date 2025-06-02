@@ -96,13 +96,20 @@
         <div class="content">
             <h5><a href="{{route('product-detail',$product->slug)}}">{{$product->title}}</a></h5>
             @php
-                $org=($product->price-($product->price*$product->discount)/100);
-            @endphp
-            @if($product->discount > 0)
-                <p class="price"><del class="text-muted">${{number_format($product->price,2)}}</del> ${{number_format($org,2)}}</p>
-            @else
-                <p class="price">${{number_format($product->price,2)}}</p>
-            @endif
+    $org = $product->price - ($product->price * $product->discount / 100);
+@endphp
+
+@if ($product->discount > 0)
+    <p class="price">
+        <del class="text-muted">₱{{ number_format($product->price, 2) }}</del>
+        ₱{{ number_format($org, 2) }}
+    </p>
+@else
+    <p class="price">₱{{ number_format($product->price, 2) }}</p>
+@endif
+
+
+
         </div>
     </div>
 @endforeach
@@ -189,15 +196,18 @@
                                             </div>
                                         <div class="product-content">
                 <h3><a href="{{route('product-detail',$product->slug)}}">{{$product->title}}</a></h3>
-                @php
-                    $after_discount=($product->price-($product->price*$product->discount)/100);
-                @endphp
-                @if($product->discount > 0)
-                    <span>${{number_format($after_discount,2)}}</span>
-                    <del style="padding-left:4%;">${{number_format($product->price,2)}}</del>
-                @else
-                    <span>${{number_format($product->price,2)}}</span>
-                @endif
+                @php 
+    $after_discount = $product->price - (($product->price * $product->discount) / 100);
+@endphp
+
+<p class="price">
+    ₱{{ number_format($after_discount, 2) }}
+    @if($product->discount > 0)
+        <br><s class="text-muted">₱{{ number_format($product->price, 2) }}</s>
+    @endif
+</p>
+
+
             </div>
         </div>
     </div>
@@ -291,10 +301,10 @@
 @endphp
 <h3>
     @if($product->discount > 0)
-        <small><del class="text-muted">${{number_format($product->price,2)}}</del></small>    
-        ${{number_format($after_discount,2)}}
+        <small><del class="text-muted">₱{{number_format($product->price,2)}}</del></small>    
+        ₱{{number_format($after_discount,2)}}
     @else
-        ${{number_format($product->price,2)}}
+    ₱{{number_format($product->price,2)}}
     @endif
 </h3>
                                             <div class="quickview-peragraph">

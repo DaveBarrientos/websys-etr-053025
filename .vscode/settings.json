@@ -1,0 +1,9 @@
+{
+  "files.exclude": {
+    "app\\Http\\Controllers\\BrandController.php": true,
+    "app\\Http\\Controllers\\BannerController.php": true,
+    "app\\Models\\Banner.php": true,
+    "app\\Models\\Brand.php": true,
+    "app\\Http\\Controllers\\PaypalController.php": true
+  }
+}

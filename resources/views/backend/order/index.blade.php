@@ -25,6 +25,8 @@
               <th>Charge</th>
               <th>Total</th>
               <th>Status</th>
+                            <th>QRCODES</th>
+
               <th>Action</th>
             </tr>
           </thead>
@@ -33,35 +35,51 @@
             @php
                 $shipping_charge=DB::table('shippings')->where('id',$order->shipping_id)->pluck('price');
             @endphp 
-                <tr>
-                    <td>{{$order->id}}</td>
-                    <td>{{$order->order_number}}</td>
-                    <td>{{$order->first_name}} {{$order->last_name}}</td>
-                    <td>{{$order->email}}</td>
-                    <td>{{$order->quantity}}</td>
-                    <td>@foreach($shipping_charge as $data)  ₱ {{number_format($data,2)}} @endforeach</td>
-                    <td>₱{{number_format($order->total_amount,2)}}</td>
-                    <td>
-                        @if($order->status=='new')
-                          <span class="badge badge-primary">NEW</span>
-                        @elseif($order->status=='process')
-                          <span class="badge badge-warning">Processing</span>
-                        @elseif($order->status=='delivered')
-                          <span class="badge badge-success">Delivered</span>
-                        @else
-                          <span class="badge badge-danger">{{$order->status}}</span>
-                        @endif
-                    </td>
-                    <td>
-                        <a href="{{route('order.show',$order->id)}}" class="btn btn-warning btn-sm float-left mr-1" style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="view" data-placement="bottom"><i class="fas fa-eye"></i></a>
-                        <a href="{{route('order.edit',$order->id)}}" class="btn btn-primary btn-sm float-left mr-1" style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="edit" data-placement="bottom"><i class="fas fa-edit"></i></a>
-                        <form method="POST" action="{{route('order.destroy',[$order->id])}}">
-                          @csrf 
-                          @method('delete')
-                              <button class="btn btn-danger btn-sm dltBtn" data-id={{$order->id}} style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fas fa-trash-alt"></i></button>
-                        </form>
-                    </td>
-                </tr>  
+             <tr>
+    <td>{{$order->id}}</td>
+    <td>{{$order->order_number}}</td>
+    <td>{{$order->first_name}} {{$order->last_name}}</td>
+    <td>{{$order->email}}</td>
+    <td>{{$order->quantity}}</td>
+    <td>@foreach($shipping_charge as $data)  ₱ {{number_format($data,2)}} @endforeach</td>
+    <td>₱{{number_format($order->total_amount,2)}}</td>
+    <td>
+        @if($order->status=='new')
+          <span class="badge badge-primary">NEW</span>
+        @elseif($order->status=='process')
+          <span class="badge badge-warning">Processing</span>
+        @elseif($order->status=='delivered')
+          <span class="badge badge-success">Delivered</span>
+        @else
+          <span class="badge badge-danger">{{$order->status}}</span>
+        @endif
+    </td>
+<td>
+   
+{!! QrCode::encoding('UTF-8')->size(80)->generate(
+    "Order ID: {$order->id}\n".
+    "Name: {$order->first_name} {$order->last_name}\n".
+    "Total: ₱".number_format($order->total_amount, 2)."\n".
+    "Payment Method: {$order->payment_method}\n".
+    "Status: ".($order->is_paid ? 'Paid' : 'Unpaid')
+) !!}
+
+</td>
+
+
+
+
+    <td>
+        <a href="{{route('order.show',$order->id)}}" class="btn btn-warning btn-sm float-left mr-1" style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="view" data-placement="bottom"><i class="fas fa-eye"></i></a>
+        <a href="{{route('order.edit',$order->id)}}" class="btn btn-primary btn-sm float-left mr-1" style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="edit" data-placement="bottom"><i class="fas fa-edit"></i></a>
+        <form method="POST" action="{{route('order.destroy',[$order->id])}}">
+          @csrf 
+          @method('delete')
+              <button class="btn btn-danger btn-sm dltBtn" data-id={{$order->id}} style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fas fa-trash-alt"></i></button>
+        </form>
+    </td>
+</tr>
+
             @endforeach
           </tbody>
         </table>

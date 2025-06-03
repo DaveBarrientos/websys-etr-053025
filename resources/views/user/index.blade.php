@@ -7,7 +7,6 @@
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
       <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
     </div>
-                                    <li><i class="fa fa-truck"></i> <a href="{{route('order.track')}}">Track Order</a></li>
 
     <!-- Content Row -->
     {{-- <div class="row">
@@ -103,7 +102,9 @@
               <th>Email</th>
               <th>Qty.</th>
               <th>Total</th>
+
               <th>Status</th>
+               <th>QR Code</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -113,38 +114,40 @@
             $counter = 1;
         @endphp
             @if(count($orders)>0)
-              @foreach($orders as $order)   
-                <tr>
-                    <td>{{$counter}}</td>
-                    <td>{{$order->order_number}}</td>
-                    <td>{{$order->first_name}} {{$order->last_name}}</td>
-                    <td>{{$order->email}}</td>
-                    <td>{{$order->quantity}}</td>
-                    <td> ₱{{number_format($order->total_amount,2)}}</td>
-                    <td>
-                        @if($order->status=='new')
-                          <span class="badge badge-primary">NEW</span>
-                        @elseif($order->status=='process')
-                          <span class="badge badge-warning">PROCESSING</span>
-                        @elseif($order->status=='delivered')
-                          <span class="badge badge-success">DELIVERED</span>
-                        @else
-                          <span class="badge badge-danger">{{$order->status}}</span>
-                        @endif
-                    </td>
-                    <td>
-                        <a href="{{route('user.order.show',$order->id)}}" class="btn btn-warning btn-sm float-left mr-1" style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="view" data-placement="bottom"><i class="fas fa-eye"></i></a>
-                        <form method="POST" action="{{route('user.order.delete',[$order->id])}}">
-                          @csrf 
-                          @method('delete')
-                              <button class="btn btn-danger btn-sm dltBtn" data-id={{$order->id}} style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fas fa-trash-alt"></i></button>
-                        </form>
-                    </td>
-                </tr>
-                @php
-                $counter++;
-            @endphp
-              @endforeach
+    @foreach($orders as $order)   
+<tr>
+  <td>{{$counter}}</td>
+  <td>{{$order->order_number}}</td>
+  <td>{{$order->first_name}} {{$order->last_name}}</td>
+  <td>{{$order->email}}</td>
+  <td>{{$order->quantity}}</td>
+  <td> ₱{{number_format($order->total_amount,2)}}</td>
+  <td>
+    @if($order->status=='new')
+      <span class="badge badge-primary">NEW</span>
+    @elseif($order->status=='process')
+      <span class="badge badge-warning">PROCESSING</span>
+    @elseif($order->status=='delivered')
+      <span class="badge badge-success">DELIVERED</span>
+    @else
+      <span class="badge badge-danger">{{$order->status}}</span>
+    @endif
+  </td>
+  <td>
+    {!! QrCode::size(60)->generate($order->order_number) !!}
+  </td>
+  <td>
+    <a href="{{route('user.order.show',$order->id)}}" class="btn btn-warning btn-sm float-left mr-1" style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="view" data-placement="bottom"><i class="fas fa-eye"></i></a>
+    <form method="POST" action="{{route('user.order.delete',[$order->id])}}">
+      @csrf 
+      @method('delete')
+      <button class="btn btn-danger btn-sm dltBtn" data-id={{$order->id}} style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fas fa-trash-alt"></i></button>
+    </form>
+  </td>
+</tr>
+@php $counter++; @endphp
+@endforeach
+
               @else
                 <td colspan="8" class="text-center"><h4 class="my-4">No orders found! Try ordering some products to view it here.</h4></td>
               @endif

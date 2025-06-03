@@ -176,12 +176,7 @@
     </form-group>
 </div>
 
-<!-- Payment Method Widget -->
-<div class="single-widget payement">
-    <div class="content">
-        <img src="{{ asset('backend/img/payment-method.png') }}" alt="#">
-    </div>
-</div>
+
 
 <!-- Button Widget -->
 <div class="single-widget get-button">

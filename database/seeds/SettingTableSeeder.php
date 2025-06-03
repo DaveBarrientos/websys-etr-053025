@@ -12,15 +12,12 @@ class SettingTableSeeder extends Seeder
     public function run()
     {
         $data=array(
-            'description'=>"Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. sed ut perspiciatis unde sunt in culpa qui officia deserunt mollit anim id est laborum. sed ut perspiciatis unde omnis iste natus error sit voluptatem Excepteu
-
-                            sunt in culpa qui officia deserunt mollit anim id est laborum. sed ut perspiciatis Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. sed ut perspi deserunt mollit anim id est laborum. sed ut perspi.",
-            'short_des'=>"Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue, magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus.",
+            'description'=>"Welcome to National Bookstore Website, your premier destination for books and educational essentials. Discover a curated collection of books, school supplies, and stationery designed to inspire learning and creativity. Dive into a world of knowledge, quality, and convenience—where every purchase fuels your passion for reading and growth.",
             'photo'=>"image.jpg",
             'logo'=>'logo.jpg',
-            'address'=>"115 Test Street, Test Country",
-            'email'=>"codeastro.com",
-            'phone'=>"1234567777",
+            'address'=>"McArthur Highway, Urdaneta, Philippines",
+            'email'=>"nationalbookstore@gmail.com",
+            'phone'=>"639273425459",
         );
         DB::table('settings')->insert($data);
     }
